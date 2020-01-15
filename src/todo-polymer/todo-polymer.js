@@ -7,6 +7,8 @@ import '@polymer/paper-material/paper-material.js';
 import '@polymer/paper-input/paper-input.js';
 import '@polymer/paper-button/paper-button.js';
 
+import axios from '@bundled-es-modules/axios/axios.js';
+
 /**
  * @customElement
  * @polymer
@@ -28,9 +30,14 @@ class TodoPolymer extends PolymerElement {
     };
   }
 
+  ready(){
+    super.ready();
+    this.getTasks();
+  }
+
   postTask(){
     if(this.taskInput !== '') {
-      this.push('todos', {task: this.taskInput});
+      this.addTask(this.taskInput);
       this.taskInput = '';
     } else {
       alert('put something in the task');
@@ -38,13 +45,38 @@ class TodoPolymer extends PolymerElement {
   }
 
   removeTask(e){
-    var target = e.model;
-    var index = this.todos.indexOf(target.get('item'));
-    this.splice('todos', index, 1);
+    const target = e.model;
+    const index = this.todos.indexOf(target.get('item'));
+    const task = this.todos[index];
+    this.deleteTask(task.id);
   }
 
   updateTaskInput(e){
     this.taskInput = e.target.value;
+  }
+
+  getTasks() {
+    const self = this;
+    axios.get('http://localhost:3000/todos')
+        .then(function (response) {
+          self.todos = response.data;
+        });
+  }
+
+  addTask(task) {
+    const self = this;
+    axios.post('http://localhost:3000/todos', {task})
+        .then(function () {
+          self.getTasks();
+        });
+  }
+
+  deleteTask(index) {
+    const self = this;
+    axios.delete('http://localhost:3000/todos/'+index)
+        .then(function () {
+          self.getTasks();
+        });
   }
 
   static get template() {

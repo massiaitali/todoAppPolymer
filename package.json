@@ -2,6 +2,7 @@
   "name": "todoApp",
   "description": "simple todo app",
   "dependencies": {
+    "@bundled-es-modules/axios": "^0.18.1",
     "@polymer/paper-button": "^3.0.1",
     "@polymer/paper-fab": "^3.0.1",
     "@polymer/paper-icon-button": "^3.0.2",
