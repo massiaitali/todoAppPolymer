@@ -26,6 +26,10 @@ class TodoPolymer extends PolymerElement {
       taskInput: {
         type: String,
         value: ''
+      },
+      urlJsonServer: {
+        type: String,
+        value: 'http://localhost:3000/todos/'
       }
     };
   }
@@ -55,7 +59,7 @@ class TodoPolymer extends PolymerElement {
 
   getTasks() {
     const self = this;
-    axios.get('http://localhost:3000/todos')
+    axios.get(this.urlJsonServer)
         .then(function (response) {
           self.todos = response.data;
         });
@@ -63,7 +67,7 @@ class TodoPolymer extends PolymerElement {
 
   addTask(task) {
     const self = this;
-    axios.post('http://localhost:3000/todos', {task})
+    axios.post(this.urlJsonServer, {task})
         .then(function () {
           self.getTasks();
         });
@@ -71,7 +75,7 @@ class TodoPolymer extends PolymerElement {
 
   deleteTask(index) {
     const self = this;
-    axios.delete('http://localhost:3000/todos/'+index)
+    axios.delete(this.urlJsonServer+index)
         .then(function () {
           self.getTasks();
         });
