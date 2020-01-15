@@ -46,9 +46,7 @@ class TodoPolymer extends PolymerElement {
 
   removeTask(e){
     const target = e.model;
-    const index = this.todos.indexOf(target.get('item'));
-    const task = this.todos[index];
-    this.deleteTask(task.id);
+    this.deleteTask(target.get('item').id);
   }
 
   updateTaskInput(e){
@@ -81,7 +79,7 @@ class TodoPolymer extends PolymerElement {
 
   static get template() {
     return html`
-    <paper-material elevation="2" style="width:500px; margin:auto; padding:15px">
+    <paper-material style="width:500px; margin:auto; padding:15px">
       <div style="display: flex;justify-content: center">
           <h1>Todo App</h1>
       </div>
