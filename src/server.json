@@ -1,15 +1,31 @@
 {
-  "todos": [
-    {
-      "task": "dqsdqsds",
-      "id": 1
-    },
+  "column-1": [
     {
       "task": "dqsdsqdsqxxqq",
       "id": 3
     },
     {
       "task": "dqsdqsd",
+      "id": 4
+    }
+  ],
+  "column-2": [
+    {
+      "task": "dqsd3223qsds",
+      "id": 1
+    },
+    {
+      "task": "dqsdsqdDDSDSsqxxqq",
+      "id": 3
+    }
+  ],
+  "column-3": [
+    {
+      "task": "dqdsqdqsdsqsdsqdsqxxqq",
+      "id": 3
+    },
+    {
+      "task": "dqsd78978798qsd",
       "id": 4
     }
   ]

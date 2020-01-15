@@ -29,7 +29,11 @@ class TodoPolymer extends PolymerElement {
       },
       urlJsonServer: {
         type: String,
-        value: 'http://localhost:3000/todos/'
+        value: 'http://localhost:3000/column-'
+      },
+      column: {
+        type: String,
+        value: ''
       }
     };
   }
@@ -59,7 +63,7 @@ class TodoPolymer extends PolymerElement {
 
   getTasks() {
     const self = this;
-    axios.get(this.urlJsonServer)
+    axios.get(this.urlJsonServer+this.column)
         .then(function (response) {
           self.todos = response.data;
         });
@@ -67,7 +71,7 @@ class TodoPolymer extends PolymerElement {
 
   addTask(task) {
     const self = this;
-    axios.post(this.urlJsonServer, {task})
+    axios.post(this.urlJsonServer+this.column, {task})
         .then(function () {
           self.getTasks();
         });
@@ -75,7 +79,7 @@ class TodoPolymer extends PolymerElement {
 
   deleteTask(index) {
     const self = this;
-    axios.delete(this.urlJsonServer+index)
+    axios.delete(this.urlJsonServer+this.column+'/'+index)
         .then(function () {
           self.getTasks();
         });
@@ -83,7 +87,7 @@ class TodoPolymer extends PolymerElement {
 
   static get template() {
     return html`
-    <paper-material style="width:500px; margin:auto; padding:15px">
+    <paper-material style="margin:auto; padding:15px">
       <div style="display: flex;justify-content: center">
           <h1>Todo App</h1>
       </div>
