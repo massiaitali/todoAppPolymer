@@ -34,6 +34,18 @@ class TodoPolymer extends PolymerElement {
       column: {
         type: String,
         value: ''
+      },
+      name: {
+        type: String,
+        value: ''
+      },
+      right: {
+        type: Boolean,
+        value: false
+      },
+      left: {
+        type: Boolean,
+        value: false
       }
     };
   }
@@ -41,6 +53,12 @@ class TodoPolymer extends PolymerElement {
   ready(){
     super.ready();
     this.getTasks();
+    this.setMoveAction();
+  }
+
+  setMoveAction() {
+    this.right = this.column !== '3';
+    this.left = this.column !== '1';
   }
 
   postTask(){
@@ -69,9 +87,9 @@ class TodoPolymer extends PolymerElement {
         });
   }
 
-  addTask(task) {
+  addTask(task, column = this.column) {
     const self = this;
-    axios.post(this.urlJsonServer+this.column, {task})
+    axios.post(this.urlJsonServer+column, {task})
         .then(function () {
           self.getTasks();
         });
@@ -85,11 +103,29 @@ class TodoPolymer extends PolymerElement {
         });
   }
 
+  goLeft(e) {
+    const elem = e.model.get('item');
+    this.deleteTask(elem.id);
+    this.addTask(elem.task, parseInt(this.column, 10) - 1);
+    setTimeout(function(){
+      location.reload();
+    }, 1000);
+  }
+
+  goRight(e) {
+    const elem = e.model.get('item');
+    this.deleteTask(elem.id);
+    this.addTask(elem.task, parseInt(this.column, 10) + 1);
+    setTimeout(function(){
+      location.reload();
+    }, 1000);
+  }
+
   static get template() {
     return html`
     <paper-material style="margin:auto; padding:15px">
       <div style="display: flex;justify-content: center">
-          <h1>Todo App</h1>
+          <h1>{{name}}</h1>
       </div>
       <div style="display: flex;justify-content: space-between">
         <paper-input id="inputTask" on-input="updateTaskInput" label="Task" value="{{taskInput}}"></paper-input>
@@ -97,12 +133,25 @@ class TodoPolymer extends PolymerElement {
       </div>
       <div style="display: flex; flex-direction: column;margin-top: 10px;">
         <template is="dom-repeat" items="{{todos}}">
-          <div style="border: 1px solid blue;padding: 10px;display: flex;justify-content: space-between;margin-bottom: 10px;">
-            <div style="display: flex; align-items: center;">
-              {{item.task}}
+          <div style="border: 1px solid blue;padding: 10px;margin-bottom: 10px;">
+            <div style="display: flex;justify-content: space-between;">
+              <div style="display: flex; align-items: center;">
+                {{item.task}}
+              </div>
+              <paper-button on-tap="removeTask" style="border: 1px solid red;">REMOVE</paper-button>
             </div>
-            <paper-button on-tap="removeTask">REMOVE</paper-button>
-           </div>
+            <div style="display: flex;justify-content: space-between;margin-top: 5px;">
+              <template is="dom-if" if="{{left}}">
+                <paper-button on-tap="goLeft" style="border: 1px solid grey;">LEFT</paper-button>
+              </template>
+              <template is="dom-if" if="{{!left}}">
+                <div></div>
+              </template>
+              <template is="dom-if" if="{{right}}">
+                <paper-button on-tap="goRight" style="border: 1px solid grey;">RIGHT</paper-button>
+              </template>
+            </div>
+          </div>
         </template>
       </div>
     </paper-material>
